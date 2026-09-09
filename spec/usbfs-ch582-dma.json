@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0",
+  "name": "usbfs_ch582_dma",
+  "chips": ["CH581", "CH582", "CH583"],
+  "base_address": "0x40008000",
+  "description": "CH581/CH582/CH583 USBFS endpoint DMA address registers.",
+  "sources": [
+    {
+      "id": "openwch-ch583-evt-v2.4",
+      "kind": "public-source",
+      "reference": "https://github.com/openwch/ch583/tree/bd508ad7ceed48377619837051412a651952857f/EVT/EXAM/USB/Device"
+    },
+    {
+      "id": "ch582-usb-observation-2026-08",
+      "kind": "hardware-observation",
+      "reference": "CH582M standalone USB endpoint DMA and traffic observations"
+    }
+  ],
+  "registers": [
+    { "name": "UEP0_DMA", "offset": 16, "width": 16, "access": "read-write", "evidence": "hardware-observed", "description": "Endpoint 0 DMA address encoded as an offset in the 0x20000000 SRAM bank.", "sources": ["openwch-ch583-evt-v2.4", "ch582-usb-observation-2026-08"] },
+    { "name": "UEP1_DMA", "offset": 20, "width": 16, "access": "read-write", "evidence": "hardware-observed", "description": "Endpoint 1 DMA address encoded as an offset in the 0x20000000 SRAM bank.", "sources": ["openwch-ch583-evt-v2.4", "ch582-usb-observation-2026-08"] },
+    { "name": "UEP2_DMA", "offset": 24, "width": 16, "access": "read-write", "evidence": "hardware-observed", "description": "Endpoint 2 DMA address encoded as an offset in the 0x20000000 SRAM bank.", "sources": ["openwch-ch583-evt-v2.4", "ch582-usb-observation-2026-08"] },
+    { "name": "UEP3_DMA", "offset": 28, "width": 16, "access": "read-write", "evidence": "hardware-observed", "description": "Endpoint 3 DMA address encoded as an offset in the 0x20000000 SRAM bank.", "sources": ["openwch-ch583-evt-v2.4", "ch582-usb-observation-2026-08"] }
+  ]
+}

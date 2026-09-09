@@ -1,0 +1,110 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/rusted-ch5/ch58x-spec/schema/register-block.schema.json",
+  "title": "CH58x register block",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "name",
+    "chips",
+    "base_address",
+    "description",
+    "sources",
+    "registers"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0" },
+    "name": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+    "chips": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "enum": ["CH581", "CH582", "CH583", "CH585"] }
+    },
+    "base_address": { "type": "string", "pattern": "^0x[0-9a-fA-F]{8}$" },
+    "description": { "type": "string", "minLength": 1 },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "kind", "reference"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-zA-Z0-9_.-]+$" },
+          "kind": {
+            "enum": ["public-document", "public-source", "binary-observation", "hardware-observation"]
+          },
+          "reference": { "type": "string", "minLength": 1 },
+          "note": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "registers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "offset", "width", "access", "evidence", "description", "sources"],
+        "properties": {
+          "name": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]*$" },
+          "offset": { "type": "integer", "minimum": 0 },
+          "width": { "enum": [8, 16, 32] },
+          "access": { "enum": ["read-only", "write-only", "read-write", "write-one-to-clear"] },
+          "evidence": {
+            "enum": ["documented", "source-correlated", "binary-observed", "hardware-observed", "inferred"]
+          },
+          "description": { "type": "string", "minLength": 1 },
+          "sources": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "type": "string" }
+          },
+          "fields": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["name", "lsb", "width", "evidence", "description"],
+              "properties": {
+                "name": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]*$" },
+                "lsb": { "type": "integer", "minimum": 0 },
+                "width": { "type": "integer", "minimum": 1 },
+                "evidence": {
+                  "enum": ["documented", "source-correlated", "binary-observed", "hardware-observed", "inferred"]
+                },
+                "description": { "type": "string", "minLength": 1 }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "register_arrays": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "offset", "count", "stride", "width", "access", "evidence", "description", "sources"],
+        "properties": {
+          "name": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]*\\{n\\}[A-Z0-9_]*$" },
+          "offset": { "type": "integer", "minimum": 0 },
+          "count": { "type": "integer", "minimum": 1 },
+          "stride": { "type": "integer", "minimum": 1 },
+          "width": { "enum": [8, 16, 32] },
+          "access": { "enum": ["read-only", "write-only", "read-write", "write-one-to-clear"] },
+          "evidence": {
+            "enum": ["documented", "source-correlated", "binary-observed", "hardware-observed", "inferred"]
+          },
+          "description": { "type": "string", "minLength": 1 },
+          "sources": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "type": "string" }
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

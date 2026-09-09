@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0",
+  "name": "usbfs_ch585_dma",
+  "chips": ["CH585"],
+  "base_address": "0x40008000",
+  "description": "CH585 USBFS endpoint DMA address registers.",
+  "sources": [
+    {
+      "id": "ch585ds1-v1.6",
+      "kind": "public-document",
+      "reference": "WCH CH585DS1 V1.6 USBFS register definitions"
+    },
+    {
+      "id": "ch585-usb-observation-2026-08",
+      "kind": "hardware-observation",
+      "reference": "CH585M standalone USBFS CDC and vendor HID tests under lease 7a9df39d904947b3"
+    }
+  ],
+  "registers": [
+    { "name": "UEP0_DMA", "offset": 16, "width": 32, "access": "read-write", "evidence": "hardware-observed", "description": "Endpoint 0 DMA offset; bits 16:0 address the 128 KiB SRAM and bits 31:17 are reserved.", "sources": ["ch585ds1-v1.6", "ch585-usb-observation-2026-08"] },
+    { "name": "UEP1_DMA", "offset": 20, "width": 32, "access": "read-write", "evidence": "hardware-observed", "description": "Endpoint 1 DMA offset; bits 16:0 address the 128 KiB SRAM and bits 31:17 are reserved.", "sources": ["ch585ds1-v1.6", "ch585-usb-observation-2026-08"] },
+    { "name": "UEP2_DMA", "offset": 24, "width": 32, "access": "read-write", "evidence": "hardware-observed", "description": "Endpoint 2 DMA offset; bits 16:0 address the 128 KiB SRAM and bits 31:17 are reserved.", "sources": ["ch585ds1-v1.6", "ch585-usb-observation-2026-08"] },
+    { "name": "UEP3_DMA", "offset": 28, "width": 32, "access": "read-write", "evidence": "hardware-observed", "description": "Endpoint 3 DMA offset; bits 16:0 address the 128 KiB SRAM and bits 31:17 are reserved.", "sources": ["ch585ds1-v1.6", "ch585-usb-observation-2026-08"] }
+  ]
+}

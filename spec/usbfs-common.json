@@ -1,0 +1,268 @@
+{
+  "schema_version": "1.0",
+  "name": "usbfs_common",
+  "chips": ["CH581", "CH582", "CH583", "CH585"],
+  "base_address": "0x40008000",
+  "description": "Common CH58x USB full-speed device control and endpoint registers.",
+  "sources": [
+    {
+      "id": "openwch-ch583-evt-v2.4",
+      "kind": "public-source",
+      "reference": "https://github.com/openwch/ch583/tree/bd508ad7ceed48377619837051412a651952857f/EVT/EXAM/USB/Device",
+      "note": "Public device examples and register definitions."
+    },
+    {
+      "id": "tinyusb-ch32-usbfs",
+      "kind": "public-source",
+      "reference": "https://github.com/hathach/tinyusb/tree/801be6c97f972b730b915708e7c4505cf7c83454/src/portable/wch",
+      "note": "Independent USBFS endpoint and toggle implementation."
+    },
+    {
+      "id": "ch582-usb-observation-2026-08",
+      "kind": "hardware-observation",
+      "reference": "CH582M standalone enumeration, control transfer, CDC, HID, clear-halt, and reset tests",
+      "note": "Applies to the recorded CH582M board and exact test images."
+    },
+    {
+      "id": "ch585-usb-observation-2026-08",
+      "kind": "hardware-observation",
+      "reference": "CH585M standalone USBFS CDC and vendor HID tests under lease 7a9df39d904947b3",
+      "note": "Validated CH585 DMA encoding and endpoint traffic."
+    }
+  ],
+  "registers": [
+    {
+      "name": "CTRL",
+      "offset": 0,
+      "width": 8,
+      "access": "read-write",
+      "evidence": "source-correlated",
+      "description": "USB controller mode, DMA, reset, and low-power control.",
+      "sources": ["openwch-ch583-evt-v2.4", "tinyusb-ch32-usbfs"]
+    },
+    {
+      "name": "UDEV_CTRL",
+      "offset": 1,
+      "width": 8,
+      "access": "read-write",
+      "evidence": "hardware-observed",
+      "description": "USB device port enable and physical transceiver control.",
+      "sources": ["openwch-ch583-evt-v2.4", "ch582-usb-observation-2026-08", "ch585-usb-observation-2026-08"]
+    },
+    {
+      "name": "INT_EN",
+      "offset": 2,
+      "width": 8,
+      "access": "read-write",
+      "evidence": "source-correlated",
+      "description": "Interrupt enable bits corresponding to INT_FG events.",
+      "sources": ["openwch-ch583-evt-v2.4", "tinyusb-ch32-usbfs"]
+    },
+    {
+      "name": "DEV_AD",
+      "offset": 3,
+      "width": 8,
+      "access": "read-write",
+      "evidence": "hardware-observed",
+      "description": "USB device address; the low seven bits contain the assigned address.",
+      "sources": ["openwch-ch583-evt-v2.4", "ch582-usb-observation-2026-08", "ch585-usb-observation-2026-08"],
+      "fields": [
+        {
+          "name": "ADDRESS",
+          "lsb": 0,
+          "width": 7,
+          "evidence": "hardware-observed",
+          "description": "Device address written after the status stage of SET_ADDRESS."
+        }
+      ]
+    },
+    {
+      "name": "MIS_ST",
+      "offset": 5,
+      "width": 8,
+      "access": "read-only",
+      "evidence": "source-correlated",
+      "description": "Miscellaneous line, suspend, and attachment status.",
+      "sources": ["openwch-ch583-evt-v2.4", "tinyusb-ch32-usbfs"]
+    },
+    {
+      "name": "INT_FG",
+      "offset": 6,
+      "width": 8,
+      "access": "write-one-to-clear",
+      "evidence": "hardware-observed",
+      "description": "Interrupt flags. Status and RX length must be captured before the event flag is cleared.",
+      "sources": ["openwch-ch583-evt-v2.4", "ch582-usb-observation-2026-08", "ch585-usb-observation-2026-08"],
+      "fields": [
+        {
+          "name": "BUS_RESET",
+          "lsb": 0,
+          "width": 1,
+          "evidence": "hardware-observed",
+          "description": "USB bus reset event."
+        },
+        {
+          "name": "TRANSFER",
+          "lsb": 1,
+          "width": 1,
+          "evidence": "hardware-observed",
+          "description": "Token transfer completed."
+        },
+        {
+          "name": "SUSPEND",
+          "lsb": 2,
+          "width": 1,
+          "evidence": "hardware-observed",
+          "description": "Suspend or resume line-state event."
+        }
+      ]
+    },
+    {
+      "name": "INT_ST",
+      "offset": 7,
+      "width": 8,
+      "access": "read-only",
+      "evidence": "hardware-observed",
+      "description": "Latest transaction status. SETUP_ACT is authoritative before the endpoint nibble is interpreted.",
+      "sources": ["openwch-ch583-evt-v2.4", "ch582-usb-observation-2026-08", "ch585-usb-observation-2026-08"],
+      "fields": [
+        {
+          "name": "ENDPOINT",
+          "lsb": 0,
+          "width": 4,
+          "evidence": "source-correlated",
+          "description": "Endpoint number for non-SETUP transactions."
+        },
+        {
+          "name": "TOKEN",
+          "lsb": 4,
+          "width": 2,
+          "evidence": "source-correlated",
+          "description": "OUT, IN, or SETUP token encoding."
+        },
+        {
+          "name": "TOGGLE_OK",
+          "lsb": 6,
+          "width": 1,
+          "evidence": "hardware-observed",
+          "description": "Received OUT data toggle matched the expected PID."
+        },
+        {
+          "name": "SETUP_ACTIVE",
+          "lsb": 7,
+          "width": 1,
+          "evidence": "hardware-observed",
+          "description": "The completed transaction is an EP0 SETUP packet."
+        }
+      ]
+    },
+    {
+      "name": "RX_LEN",
+      "offset": 8,
+      "width": 8,
+      "access": "read-only",
+      "evidence": "hardware-observed",
+      "description": "Received payload length for the completed OUT or SETUP transaction.",
+      "sources": ["openwch-ch583-evt-v2.4", "ch582-usb-observation-2026-08", "ch585-usb-observation-2026-08"]
+    },
+    {
+      "name": "UEP4_1_MOD",
+      "offset": 12,
+      "width": 8,
+      "access": "read-write",
+      "evidence": "source-correlated",
+      "description": "Endpoint 1 direction enables and endpoint 4 mode controls.",
+      "sources": ["openwch-ch583-evt-v2.4", "tinyusb-ch32-usbfs"]
+    },
+    {
+      "name": "UEP2_3_MOD",
+      "offset": 13,
+      "width": 8,
+      "access": "read-write",
+      "evidence": "source-correlated",
+      "description": "Endpoint 2 and endpoint 3 direction enables.",
+      "sources": ["openwch-ch583-evt-v2.4", "tinyusb-ch32-usbfs"]
+    },
+    {
+      "name": "UEP5_6_MOD",
+      "offset": 14,
+      "width": 8,
+      "access": "read-write",
+      "evidence": "source-correlated",
+      "description": "Endpoint 5 and endpoint 6 mode controls on implementations that expose them.",
+      "sources": ["openwch-ch583-evt-v2.4"]
+    },
+    {
+      "name": "UEP0_T_LEN",
+      "offset": 32,
+      "width": 8,
+      "access": "read-write",
+      "evidence": "hardware-observed",
+      "description": "Endpoint 0 transmit payload length.",
+      "sources": ["openwch-ch583-evt-v2.4", "ch582-usb-observation-2026-08", "ch585-usb-observation-2026-08"]
+    },
+    {
+      "name": "UEP0_CTRL",
+      "offset": 34,
+      "width": 8,
+      "access": "read-write",
+      "evidence": "hardware-observed",
+      "description": "Endpoint 0 receive/transmit response and data toggle state.",
+      "sources": ["openwch-ch583-evt-v2.4", "ch582-usb-observation-2026-08", "ch585-usb-observation-2026-08"]
+    },
+    {
+      "name": "UEP1_T_LEN",
+      "offset": 36,
+      "width": 8,
+      "access": "read-write",
+      "evidence": "hardware-observed",
+      "description": "Endpoint 1 transmit payload length.",
+      "sources": ["openwch-ch583-evt-v2.4", "ch582-usb-observation-2026-08", "ch585-usb-observation-2026-08"]
+    },
+    {
+      "name": "UEP1_CTRL",
+      "offset": 38,
+      "width": 8,
+      "access": "read-write",
+      "evidence": "hardware-observed",
+      "description": "Endpoint 1 response, data toggle, and automatic-toggle state.",
+      "sources": ["openwch-ch583-evt-v2.4", "tinyusb-ch32-usbfs", "ch582-usb-observation-2026-08", "ch585-usb-observation-2026-08"]
+    },
+    {
+      "name": "UEP2_T_LEN",
+      "offset": 40,
+      "width": 8,
+      "access": "read-write",
+      "evidence": "hardware-observed",
+      "description": "Endpoint 2 transmit payload length.",
+      "sources": ["openwch-ch583-evt-v2.4", "ch582-usb-observation-2026-08", "ch585-usb-observation-2026-08"]
+    },
+    {
+      "name": "UEP2_CTRL",
+      "offset": 42,
+      "width": 8,
+      "access": "read-write",
+      "evidence": "hardware-observed",
+      "description": "Endpoint 2 response, data toggle, and automatic-toggle state.",
+      "sources": ["openwch-ch583-evt-v2.4", "tinyusb-ch32-usbfs", "ch582-usb-observation-2026-08", "ch585-usb-observation-2026-08"]
+    },
+    {
+      "name": "UEP3_T_LEN",
+      "offset": 44,
+      "width": 8,
+      "access": "read-write",
+      "evidence": "hardware-observed",
+      "description": "Endpoint 3 transmit payload length.",
+      "sources": ["openwch-ch583-evt-v2.4", "ch582-usb-observation-2026-08", "ch585-usb-observation-2026-08"]
+    },
+    {
+      "name": "UEP3_CTRL",
+      "offset": 46,
+      "width": 8,
+      "access": "read-write",
+      "evidence": "hardware-observed",
+      "description": "Endpoint 3 response, data toggle, and automatic-toggle state.",
+      "sources": ["openwch-ch583-evt-v2.4", "tinyusb-ch32-usbfs", "ch582-usb-observation-2026-08", "ch585-usb-observation-2026-08"]
+    }
+  ]
+}
