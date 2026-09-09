@@ -1,0 +1,135 @@
+{
+  "schema_version": "1.0",
+  "name": "system_ch585",
+  "chips": ["CH585"],
+  "base_address": "0x40001000",
+  "description": "CH585 clock, protected-access, watchdog, and pin-function registers used during startup and peripheral enable.",
+  "sources": [
+    {
+      "id": "ch585ds1-v1.6",
+      "kind": "public-document",
+      "reference": "WCH CH585DS1 V1.6 system-control register definitions"
+    },
+    {
+      "id": "ch585-public-startup",
+      "kind": "public-source",
+      "reference": "WCH CH585 public startup, clock, and peripheral examples"
+    },
+    {
+      "id": "ch585-startup-hardware-2026-08",
+      "kind": "hardware-observation",
+      "reference": "CH585M cold-start, HSE/PLL, GPIO, USBFS, and USBHS observations",
+      "note": "Applies to the recorded CH585M EVT fixture and exact startup images."
+    }
+  ],
+  "registers": [
+    {
+      "name": "CLK_SYS_CFG",
+      "offset": 8,
+      "width": 16,
+      "access": "read-write",
+      "evidence": "hardware-observed",
+      "description": "System clock source and PLL divider configuration.",
+      "sources": ["ch585ds1-v1.6", "ch585-public-startup", "ch585-startup-hardware-2026-08"]
+    },
+    {
+      "name": "HFCK_PWR_CTRL",
+      "offset": 10,
+      "width": 8,
+      "access": "read-write",
+      "evidence": "hardware-observed",
+      "description": "High-frequency RC, crystal, and PLL power control.",
+      "sources": ["ch585ds1-v1.6", "ch585-public-startup", "ch585-startup-hardware-2026-08"],
+      "fields": [
+        { "name": "RC16M_POWER", "lsb": 1, "width": 1, "evidence": "source-correlated", "description": "Power the internal 16 MHz oscillator." },
+        { "name": "XT32M_POWER", "lsb": 2, "width": 1, "evidence": "hardware-observed", "description": "Power the external 32 MHz crystal oscillator." },
+        { "name": "PLL_POWER", "lsb": 4, "width": 1, "evidence": "hardware-observed", "description": "Power the high-frequency PLL." }
+      ]
+    },
+    {
+      "name": "SAFE_MODE_CTRL",
+      "offset": 16,
+      "width": 32,
+      "access": "read-write",
+      "evidence": "binary-observed",
+      "description": "Protected-write timing control. Bit 0 enables the short automatic safe-access timeout.",
+      "sources": ["ch585-public-startup", "ch585-startup-hardware-2026-08"],
+      "fields": [
+        { "name": "AUTO_TIMEOUT_ENABLE", "lsb": 0, "width": 1, "evidence": "binary-observed", "description": "Enable automatic closure of the protected-write window after approximately sixteen cycles." }
+      ]
+    },
+    {
+      "name": "PIN_CONFIG",
+      "offset": 26,
+      "width": 16,
+      "access": "read-write",
+      "evidence": "hardware-observed",
+      "description": "Analog and digital peripheral pin-function enables.",
+      "sources": ["ch585ds1-v1.6", "ch585-public-startup", "ch585-startup-hardware-2026-08"],
+      "fields": [
+        { "name": "USBHS_ENABLE", "lsb": 5, "width": 1, "evidence": "hardware-observed", "description": "Enable the USBHS pin function." },
+        { "name": "USBFS_PULLUP_ENABLE", "lsb": 6, "width": 1, "evidence": "hardware-observed", "description": "Enable the USBFS D+ device pull-up." },
+        { "name": "USBFS_ENABLE", "lsb": 7, "width": 1, "evidence": "hardware-observed", "description": "Enable the USBFS analog pin function." }
+      ]
+    },
+    {
+      "name": "CK32K_CONFIG",
+      "offset": 47,
+      "width": 8,
+      "access": "read-write",
+      "evidence": "hardware-observed",
+      "description": "32 kHz internal/external oscillator power and selection.",
+      "sources": ["ch585ds1-v1.6", "ch585-public-startup", "ch585-startup-hardware-2026-08"],
+      "fields": [
+        { "name": "XT32K_POWER", "lsb": 0, "width": 1, "evidence": "hardware-observed", "description": "Power the external 32.768 kHz crystal oscillator." },
+        { "name": "INT32K_POWER", "lsb": 1, "width": 1, "evidence": "hardware-observed", "description": "Power the internal 32 kHz oscillator." },
+        { "name": "SELECT_XT32K", "lsb": 2, "width": 1, "evidence": "hardware-observed", "description": "Select the external 32.768 kHz oscillator." }
+      ]
+    },
+    {
+      "name": "SAFE_ACCESS",
+      "offset": 64,
+      "width": 8,
+      "access": "write-only",
+      "evidence": "hardware-observed",
+      "description": "Protected-register unlock port. Consecutive writes of 0x57 and 0xa8 open the protected window; writing zero closes it.",
+      "sources": ["ch585-public-startup", "ch585-startup-hardware-2026-08"]
+    },
+    {
+      "name": "WATCHDOG_COUNT",
+      "offset": 67,
+      "width": 8,
+      "access": "read-write",
+      "evidence": "source-correlated",
+      "description": "Watchdog count/reload register used to prevent inherited boot state from expiring during oscillator startup.",
+      "sources": ["ch585ds1-v1.6", "ch585-public-startup"]
+    },
+    {
+      "name": "MISC_CTRL",
+      "offset": 72,
+      "width": 32,
+      "access": "read-write",
+      "evidence": "binary-observed",
+      "description": "Miscellaneous SoC startup controls used by the CH585 initialization sequence.",
+      "sources": ["ch585-public-startup", "ch585-startup-hardware-2026-08"]
+    },
+    {
+      "name": "PLL_CONFIG",
+      "offset": 75,
+      "width": 8,
+      "access": "read-write",
+      "evidence": "hardware-observed",
+      "description": "PLL startup and clock-path configuration.",
+      "sources": ["ch585ds1-v1.6", "ch585-public-startup", "ch585-startup-hardware-2026-08"]
+    },
+    {
+      "name": "XT32M_TUNE",
+      "offset": 78,
+      "width": 8,
+      "access": "read-write",
+      "evidence": "hardware-observed",
+      "description": "External 32 MHz oscillator tuning used before clock handoff.",
+      "sources": ["ch585ds1-v1.6", "ch585-public-startup", "ch585-startup-hardware-2026-08"]
+    }
+  ]
+}

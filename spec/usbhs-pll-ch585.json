@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0",
+  "name": "usbhs_pll_ch585",
+  "chips": ["CH585"],
+  "base_address": "0x40009200",
+  "description": "CH585 USBHS PHY PLL control.",
+  "sources": [
+    { "id": "ch585ds1-v1.6", "kind": "public-document", "reference": "WCH CH585DS1 V1.6 USBHS PLL definition" },
+    { "id": "ch585-usbhs-hardware-2026-08", "kind": "hardware-observation", "reference": "CH585M USBHS link-ready and high-speed enumeration observations" }
+  ],
+  "registers": [
+    {
+      "name": "PLL_CTRL",
+      "offset": 0,
+      "width": 8,
+      "access": "read-write",
+      "evidence": "hardware-observed",
+      "description": "USBHS PHY PLL control.",
+      "sources": ["ch585ds1-v1.6", "ch585-usbhs-hardware-2026-08"],
+      "fields": [
+        { "name": "ENABLE", "lsb": 2, "width": 1, "evidence": "hardware-observed", "description": "Enable the USBHS PHY PLL." }
+      ]
+    }
+  ]
+}
