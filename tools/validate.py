@@ -7,9 +7,16 @@ import json
 from pathlib import Path
 import sys
 
+from jsonschema.validators import validator_for
+
 
 ROOT = Path(__file__).resolve().parents[1]
 SPEC_DIR = ROOT / "spec"
+SCHEMA_PATH = ROOT / "schema" / "register-block.schema.json"
+SCHEMA = json.loads(SCHEMA_PATH.read_text())
+SchemaValidator = validator_for(SCHEMA)
+SchemaValidator.check_schema(SCHEMA)
+SCHEMA_VALIDATOR = SchemaValidator(SCHEMA)
 EVIDENCE = {
     "documented",
     "source-correlated",
@@ -26,6 +33,13 @@ def fail(path: Path, message: str) -> None:
 
 def validate(path: Path) -> None:
     block = json.loads(path.read_text())
+    schema_errors = sorted(
+        SCHEMA_VALIDATOR.iter_errors(block), key=lambda error: list(error.path)
+    )
+    if schema_errors:
+        location = ".".join(str(part) for part in schema_errors[0].path) or "<root>"
+        fail(path, f"schema at {location}: {schema_errors[0].message}")
+
     required = {
         "schema_version",
         "name",
