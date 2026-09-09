@@ -1,0 +1,70 @@
+{
+  "schema_version": "1.0",
+  "name": "dataflash_ch582",
+  "chips": ["CH582"],
+  "base_address": "0x40001800",
+  "description": "CH582 internal flash serial-command interface used for DataFlash and factory-row access.",
+  "sources": [
+    {
+      "id": "openwch-ch583-evt-v2.4",
+      "kind": "public-source",
+      "reference": "https://github.com/openwch/ch583/tree/bd508ad7ceed48377619837051412a651952857f/EVT"
+    },
+    {
+      "id": "ch582-dataflash-hardware-2026-08",
+      "kind": "hardware-observation",
+      "reference": "CH582M erase, program, readback, factory-row, and PFIC-reset persistence observations",
+      "note": "Applies to the recorded CH582M target and exact standalone DataFlash cases."
+    }
+  ],
+  "registers": [
+    {
+      "name": "DATA_WORD",
+      "offset": 0,
+      "width": 32,
+      "access": "read-only",
+      "evidence": "hardware-observed",
+      "description": "Four-byte receive window for the internal flash serial interface.",
+      "sources": ["openwch-ch583-evt-v2.4", "ch582-dataflash-hardware-2026-08"]
+    },
+    {
+      "name": "DATA",
+      "offset": 4,
+      "width": 8,
+      "access": "read-write",
+      "evidence": "hardware-observed",
+      "description": "Byte input/output port for command, address, dummy, and payload bytes.",
+      "sources": ["openwch-ch583-evt-v2.4", "ch582-dataflash-hardware-2026-08"]
+    },
+    {
+      "name": "FLASH_SCK",
+      "offset": 5,
+      "width": 8,
+      "access": "read-write",
+      "evidence": "source-correlated",
+      "description": "Internal flash serial-interface clock configuration.",
+      "sources": ["openwch-ch583-evt-v2.4"]
+    },
+    {
+      "name": "CTRL",
+      "offset": 6,
+      "width": 8,
+      "access": "read-write",
+      "evidence": "hardware-observed",
+      "description": "Serial-interface enable and busy state. Bit 7 remains set while the controller cannot accept the next byte.",
+      "sources": ["openwch-ch583-evt-v2.4", "ch582-dataflash-hardware-2026-08"],
+      "fields": [
+        { "name": "BUSY", "lsb": 7, "width": 1, "evidence": "hardware-observed", "description": "The current byte transfer is still in progress." }
+      ]
+    },
+    {
+      "name": "FLASH_CFG",
+      "offset": 7,
+      "width": 8,
+      "access": "read-write",
+      "evidence": "source-correlated",
+      "description": "Flash execution timing configuration used during system-clock handoff.",
+      "sources": ["openwch-ch583-evt-v2.4"]
+    }
+  ]
+}
