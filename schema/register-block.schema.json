@@ -89,6 +89,7 @@
           "name": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]*\\{n\\}[A-Z0-9_]*$" },
           "offset": { "type": "integer", "minimum": 0 },
           "count": { "type": "integer", "minimum": 1 },
+          "index_base": { "type": "integer", "minimum": 0 },
           "stride": { "type": "integer", "minimum": 1 },
           "width": { "enum": [8, 16, 32] },
           "access": { "enum": ["read-only", "write-only", "read-write", "write-one-to-clear"] },

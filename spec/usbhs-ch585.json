@@ -1,0 +1,140 @@
+{
+  "schema_version": "1.0",
+  "name": "usbhs_ch585",
+  "chips": ["CH585"],
+  "base_address": "0x40009000",
+  "description": "CH585 high-speed USB device controller with eight endpoint slots and 17-bit SRAM DMA offsets.",
+  "sources": [
+    {
+      "id": "ch585ds1-v1.6",
+      "kind": "public-document",
+      "reference": "WCH CH585DS1 V1.6 USB high-speed device register definitions"
+    },
+    {
+      "id": "ch585-usbhs-source-observation-2026-08",
+      "kind": "binary-observation",
+      "reference": "Register access sequences correlated across the public CH585 examples and independently implemented Rust driver"
+    },
+    {
+      "id": "ch585-usbhs-hardware-2026-08",
+      "kind": "hardware-observation",
+      "reference": "CH585M USBHS enumeration, control, bulk, interrupt, reset, and sustained interrupt-IN experiments",
+      "note": "Applies only to the recorded CH585M EVT fixture, firmware hashes, endpoints, and host workload."
+    }
+  ],
+  "registers": [
+    {
+      "name": "CTRL",
+      "offset": 0,
+      "width": 8,
+      "access": "read-write",
+      "evidence": "hardware-observed",
+      "description": "Controller enable, DMA, PHY, low-power, SIE reset, and link reset control.",
+      "sources": ["ch585ds1-v1.6", "ch585-usbhs-hardware-2026-08"],
+      "fields": [
+        { "name": "LINK_RESET", "lsb": 0, "width": 1, "evidence": "source-correlated", "description": "Reset the USB link state machine." },
+        { "name": "SIE_RESET", "lsb": 1, "width": 1, "evidence": "source-correlated", "description": "Reset the serial interface engine." },
+        { "name": "PHY_ACTIVE", "lsb": 3, "width": 1, "evidence": "hardware-observed", "description": "Activate the high-speed PHY." },
+        { "name": "DMA_ENABLE", "lsb": 4, "width": 1, "evidence": "hardware-observed", "description": "Enable endpoint DMA." },
+        { "name": "DEVICE_ENABLE", "lsb": 5, "width": 1, "evidence": "hardware-observed", "description": "Enable device operation." },
+        { "name": "LPM_ENABLE", "lsb": 7, "width": 1, "evidence": "source-correlated", "description": "Enable link power management handling." }
+      ]
+    },
+    {
+      "name": "BASE_MODE",
+      "offset": 1,
+      "width": 8,
+      "access": "read-write",
+      "evidence": "hardware-observed",
+      "description": "Controller speed and base operating mode.",
+      "sources": ["ch585ds1-v1.6", "ch585-usbhs-hardware-2026-08"],
+      "fields": [
+        { "name": "HIGH_SPEED", "lsb": 0, "width": 1, "evidence": "hardware-observed", "description": "Select high-speed device mode." }
+      ]
+    },
+    {
+      "name": "INT_EN",
+      "offset": 2,
+      "width": 8,
+      "access": "read-write",
+      "evidence": "source-correlated",
+      "description": "Interrupt enable mask corresponding to INT_FG.",
+      "sources": ["ch585ds1-v1.6", "ch585-usbhs-source-observation-2026-08"]
+    },
+    {
+      "name": "DEV_AD",
+      "offset": 3,
+      "width": 8,
+      "access": "read-write",
+      "evidence": "hardware-observed",
+      "description": "USB device address in the low seven bits.",
+      "sources": ["ch585ds1-v1.6", "ch585-usbhs-hardware-2026-08"]
+    },
+    {
+      "name": "INT_FG",
+      "offset": 8,
+      "width": 8,
+      "access": "write-one-to-clear",
+      "evidence": "hardware-observed",
+      "description": "Bus reset, suspend, sleep, LPM, transfer, and link-ready interrupt flags.",
+      "sources": ["ch585ds1-v1.6", "ch585-usbhs-hardware-2026-08"],
+      "fields": [
+        { "name": "BUS_RESET", "lsb": 0, "width": 1, "evidence": "hardware-observed", "description": "USB bus reset event." },
+        { "name": "SUSPEND", "lsb": 1, "width": 1, "evidence": "hardware-observed", "description": "Suspend state transition." },
+        { "name": "BUS_SLEEP", "lsb": 2, "width": 1, "evidence": "source-correlated", "description": "Bus sleep event." },
+        { "name": "LPM", "lsb": 3, "width": 1, "evidence": "source-correlated", "description": "Link power management event." },
+        { "name": "TRANSFER", "lsb": 4, "width": 1, "evidence": "hardware-observed", "description": "Endpoint transfer completed." },
+        { "name": "LINK_READY", "lsb": 6, "width": 1, "evidence": "hardware-observed", "description": "High-speed link became ready." }
+      ]
+    },
+    {
+      "name": "INT_ST",
+      "offset": 9,
+      "width": 8,
+      "access": "read-only",
+      "evidence": "hardware-observed",
+      "description": "Completed transfer endpoint and direction.",
+      "sources": ["ch585ds1-v1.6", "ch585-usbhs-hardware-2026-08"],
+      "fields": [
+        { "name": "ENDPOINT", "lsb": 0, "width": 3, "evidence": "hardware-observed", "description": "Endpoint number from zero through seven." },
+        { "name": "DIRECTION_IN", "lsb": 4, "width": 1, "evidence": "hardware-observed", "description": "Set for a completed IN transfer." }
+      ]
+    },
+    {
+      "name": "MIS_ST",
+      "offset": 10,
+      "width": 8,
+      "access": "read-only",
+      "evidence": "hardware-observed",
+      "description": "Negotiated speed and suspend state.",
+      "sources": ["ch585ds1-v1.6", "ch585-usbhs-hardware-2026-08"],
+      "fields": [
+        { "name": "SUSPENDED", "lsb": 1, "width": 1, "evidence": "hardware-observed", "description": "The link is suspended." },
+        { "name": "HIGH_SPEED", "lsb": 7, "width": 1, "evidence": "hardware-observed", "description": "The negotiated link is high-speed." }
+      ]
+    },
+    {
+      "name": "FRAME_NO",
+      "offset": 12,
+      "width": 16,
+      "access": "read-only",
+      "evidence": "documented",
+      "description": "Current USB frame or microframe number.",
+      "sources": ["ch585ds1-v1.6"]
+    },
+    { "name": "EP_TX_EN", "offset": 16, "width": 16, "access": "read-write", "evidence": "hardware-observed", "description": "Transmit-direction enable mask for endpoint slots.", "sources": ["ch585ds1-v1.6", "ch585-usbhs-hardware-2026-08"] },
+    { "name": "EP_RX_EN", "offset": 18, "width": 16, "access": "read-write", "evidence": "hardware-observed", "description": "Receive-direction enable mask for endpoint slots.", "sources": ["ch585ds1-v1.6", "ch585-usbhs-hardware-2026-08"] },
+    { "name": "EP_TX_AUTO_TOGGLE", "offset": 20, "width": 16, "access": "read-write", "evidence": "source-correlated", "description": "Transmit automatic-toggle enable mask.", "sources": ["ch585ds1-v1.6", "ch585-usbhs-source-observation-2026-08"] },
+    { "name": "EP_RX_AUTO_TOGGLE", "offset": 22, "width": 16, "access": "read-write", "evidence": "source-correlated", "description": "Receive automatic-toggle enable mask.", "sources": ["ch585ds1-v1.6", "ch585-usbhs-source-observation-2026-08"] },
+    { "name": "EP0_DMA", "offset": 32, "width": 32, "access": "read-write", "evidence": "hardware-observed", "description": "Shared EP0 DMA offset in CH585 SRAM; only bits 16:0 are defined.", "sources": ["ch585ds1-v1.6", "ch585-usbhs-hardware-2026-08"] }
+  ],
+  "register_arrays": [
+    { "name": "EP{n}_RX_DMA", "offset": 36, "count": 7, "index_base": 1, "stride": 4, "width": 32, "access": "read-write", "evidence": "hardware-observed", "description": "Receive DMA offset for endpoint n; only bits 16:0 are defined.", "sources": ["ch585ds1-v1.6", "ch585-usbhs-hardware-2026-08"] },
+    { "name": "EP{n}_TX_DMA", "offset": 64, "count": 7, "index_base": 1, "stride": 4, "width": 32, "access": "read-write", "evidence": "hardware-observed", "description": "Transmit DMA offset for endpoint n; only bits 16:0 are defined.", "sources": ["ch585ds1-v1.6", "ch585-usbhs-hardware-2026-08"] },
+    { "name": "EP{n}_MAX_LEN", "offset": 92, "count": 8, "stride": 4, "width": 32, "access": "read-write", "evidence": "hardware-observed", "description": "Maximum receive packet length for endpoint n.", "sources": ["ch585ds1-v1.6", "ch585-usbhs-hardware-2026-08"] },
+    { "name": "EP{n}_RX_LEN", "offset": 124, "count": 8, "stride": 4, "width": 16, "access": "read-only", "evidence": "hardware-observed", "description": "Received packet length for endpoint n.", "sources": ["ch585ds1-v1.6", "ch585-usbhs-hardware-2026-08"] },
+    { "name": "EP{n}_TX_LEN", "offset": 156, "count": 8, "stride": 4, "width": 16, "access": "read-write", "evidence": "hardware-observed", "description": "Transmit packet length for endpoint n.", "sources": ["ch585ds1-v1.6", "ch585-usbhs-hardware-2026-08"] },
+    { "name": "EP{n}_TX_CTRL", "offset": 158, "count": 8, "stride": 4, "width": 8, "access": "read-write", "evidence": "hardware-observed", "description": "Transmit response and data-toggle control for endpoint n.", "sources": ["ch585ds1-v1.6", "ch585-usbhs-hardware-2026-08"] },
+    { "name": "EP{n}_RX_CTRL", "offset": 159, "count": 8, "stride": 4, "width": 8, "access": "read-write", "evidence": "hardware-observed", "description": "Receive response, SETUP, and data-toggle control for endpoint n.", "sources": ["ch585ds1-v1.6", "ch585-usbhs-hardware-2026-08"] }
+  ]
+}

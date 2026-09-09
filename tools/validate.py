@@ -52,12 +52,14 @@ def validate(path: Path) -> None:
     for array in block.get("register_arrays", []):
         if "{n}" not in array["name"]:
             fail(path, f"register array {array['name']}: missing {{n}} placeholder")
-        for index in range(array["count"]):
+        index_base = array.get("index_base", 0)
+        for slot in range(array["count"]):
+            index = index_base + slot
             registers.append(
                 {
                     **array,
                     "name": array["name"].replace("{n}", str(index)),
-                    "offset": array["offset"] + index * array["stride"],
+                    "offset": array["offset"] + slot * array["stride"],
                 }
             )
 

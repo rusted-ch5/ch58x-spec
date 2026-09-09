@@ -8,4 +8,5 @@ meaning has evidence; unknown and reserved bits are intentionally omitted.
 
 Uniform repeated registers may use `register_arrays`. The `{n}` placeholder in
 the name expands from zero through `count - 1`; `offset` identifies instance
-zero and `stride` is measured in bytes.
+zero and `stride` is measured in bytes. `index_base` changes the first value
+substituted for `{n}` without changing the offset calculation.
