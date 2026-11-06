@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0",
+  "kind": "ble-profile",
+  "name": "ch582-experimental-peripheral",
+  "chip": "CH582",
+  "experimental": true,
+  "role": "independent-resource-adaptation",
+  "sram_bytes": 32768,
+  "base_contract": "../../protocol/ch585-ble-hci.json",
+  "status": "not-yet-conformant",
+  "features": [
+    {
+      "id": "peripheral",
+      "requirement": "required"
+    }
+  ],
+  "rules": [
+    "Explicit experimental selection; never the CH585 default.",
+    "One Peripheral link; Central and dual-role excluded from this memory profile.",
+    "Full BLE+USB simultaneous enablement requires independent SRAM and physical acceptance.",
+    "Trim resources in the CH582 module only; do not weaken HCI/LL ownership or MIC semantics.",
+    "Revalidate all chip register, DMA, timer and RF differences."
+  ]
+}

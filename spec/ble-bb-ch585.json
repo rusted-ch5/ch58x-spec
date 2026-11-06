@@ -1,0 +1,128 @@
+{
+  "schema_version": "1.0",
+  "name": "ble_bb_ch585",
+  "chips": [
+    "CH585"
+  ],
+  "base_address": "0x4000c100",
+  "description": "CH585 plaintext BLE register subset. No reset values or unsupported field meanings inferred. Not a CH582 register map.",
+  "sources": [
+    {
+      "id": "public-rust",
+      "kind": "public-source",
+      "reference": "https://github.com/rusted-ch5/ch58x-hal/blob/ebf01e9/crates/ch58x-ble/src/radio.rs"
+    }
+  ],
+  "registers": [
+    {
+      "name": "CONFIG",
+      "offset": 0,
+      "width": 32,
+      "access": "read-write",
+      "evidence": "inferred",
+      "description": "Channel in bits 6:0; mode mask 0x300, idle 0x100, active 0x200. Other fields require their own evidence.",
+      "sources": [
+        "public-rust"
+      ]
+    },
+    {
+      "name": "TX_CRC_INIT",
+      "offset": 4,
+      "width": 32,
+      "access": "read-write",
+      "evidence": "inferred",
+      "description": "Low 24 bits CRC initialization.",
+      "sources": [
+        "public-rust"
+      ]
+    },
+    {
+      "name": "TX_ACCESS_ADDRESS",
+      "offset": 8,
+      "width": 32,
+      "access": "read-write",
+      "evidence": "inferred",
+      "description": "Access address for selected radio link.",
+      "sources": [
+        "public-rust"
+      ]
+    },
+    {
+      "name": "RX_CONFIG_10",
+      "offset": 16,
+      "width": 32,
+      "access": "read-write",
+      "evidence": "inferred",
+      "description": "Observed receive setup; whole-field meanings not admitted.",
+      "sources": [
+        "public-rust"
+      ]
+    },
+    {
+      "name": "RX_CONFIG_18",
+      "offset": 24,
+      "width": 32,
+      "access": "read-write",
+      "evidence": "inferred",
+      "description": "Observed LE1M receive setup; whole-field meanings not admitted.",
+      "sources": [
+        "public-rust"
+      ]
+    },
+    {
+      "name": "TX_CONTROL",
+      "offset": 44,
+      "width": 32,
+      "access": "read-write",
+      "evidence": "inferred",
+      "description": "Low two bits control paused/staged TX; ordering is specified in behavior notes.",
+      "sources": [
+        "public-rust"
+      ]
+    },
+    {
+      "name": "RSSI_STATUS",
+      "offset": 48,
+      "width": 32,
+      "access": "read-only",
+      "evidence": "inferred",
+      "description": "Source RSSI extraction uses negative signed byte from value >> 15; calibration not established.",
+      "sources": [
+        "public-rust"
+      ]
+    },
+    {
+      "name": "INTERRUPT_ENABLE",
+      "offset": 52,
+      "width": 32,
+      "access": "read-write",
+      "evidence": "inferred",
+      "description": "Interrupt source enables; complete field semantics not admitted.",
+      "sources": [
+        "public-rust"
+      ]
+    },
+    {
+      "name": "INTERRUPT_STATUS",
+      "offset": 56,
+      "width": 32,
+      "access": "write-one-to-clear",
+      "evidence": "inferred",
+      "description": "W1C subset bits 4..8. Capture bit 6, CRC-error bit 5. Snapshot before clearing; capture acknowledges only bit 6 before CRC ownership is consumed.",
+      "sources": [
+        "public-rust"
+      ]
+    },
+    {
+      "name": "CONFIG_3C",
+      "offset": 60,
+      "width": 32,
+      "access": "read-write",
+      "evidence": "inferred",
+      "description": "Observed CH585 initialization 0x0002020c; not a reset-value claim.",
+      "sources": [
+        "public-rust"
+      ]
+    }
+  ]
+}

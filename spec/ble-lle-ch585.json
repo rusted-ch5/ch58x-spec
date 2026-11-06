@@ -1,0 +1,117 @@
+{
+  "schema_version": "1.0",
+  "name": "ble_lle_ch585",
+  "chips": [
+    "CH585"
+  ],
+  "base_address": "0x4000c200",
+  "description": "CH585 plaintext BLE register subset. No reset values or unsupported field meanings inferred. Not a CH582 register map.",
+  "sources": [
+    {
+      "id": "public-rust",
+      "kind": "public-source",
+      "reference": "https://github.com/rusted-ch5/ch58x-hal/blob/ebf01e9/crates/ch58x-ble/src/radio.rs"
+    }
+  ],
+  "registers": [
+    {
+      "name": "COMMAND",
+      "offset": 0,
+      "width": 32,
+      "access": "read-write",
+      "evidence": "inferred",
+      "description": "Observed RX=1, TX=2, SHUT=8 command values; undocumented values excluded.",
+      "sources": [
+        "public-rust"
+      ]
+    },
+    {
+      "name": "CONFIG",
+      "offset": 4,
+      "width": 32,
+      "access": "read-write",
+      "evidence": "inferred",
+      "description": "Bit 0 staged RX/TX chaining; upper halfword has a separate 16-bit setup write. Do not treat all fields as one atomic semantic unit.",
+      "sources": [
+        "public-rust"
+      ]
+    },
+    {
+      "name": "STATUS",
+      "offset": 8,
+      "width": 32,
+      "access": "write-one-to-clear",
+      "evidence": "inferred",
+      "description": "Bit 0 RX complete, bit 1 TX complete, bit 2 RX-to-TX service, bit 3 TX-to-RX service, bit 17 capture. Capture-start acknowledgement is not RX completion.",
+      "sources": [
+        "public-rust"
+      ]
+    },
+    {
+      "name": "INTERRUPT_ENABLE",
+      "offset": 12,
+      "width": 32,
+      "access": "read-write",
+      "evidence": "inferred",
+      "description": "Capture source uses bit 17.",
+      "sources": [
+        "public-rust"
+      ]
+    },
+    {
+      "name": "RX_TO_TX_TIMING",
+      "offset": 28,
+      "width": 32,
+      "access": "read-write",
+      "evidence": "inferred",
+      "description": "CH585 LE1M timing offset 0x76; not a microsecond value.",
+      "sources": [
+        "public-rust"
+      ]
+    },
+    {
+      "name": "MODE",
+      "offset": 80,
+      "width": 32,
+      "access": "read-write",
+      "evidence": "inferred",
+      "description": "Complete observed words idle=0x30000, calibration=0x30558, RX=0x30158, TX=0x30258. Individual mode bits not fully specified.",
+      "sources": [
+        "public-rust"
+      ]
+    },
+    {
+      "name": "COUNTDOWN",
+      "offset": 100,
+      "width": 32,
+      "access": "read-write",
+      "evidence": "inferred",
+      "description": "LE1M TX: ((packet_bytes+2)*8+0xee)*2, packet includes two-byte header. RX capture: (maximum_payload_bytes+5)*16+0x3c. Transition reload=0x18e. No claim these clocks are microseconds.",
+      "sources": [
+        "public-rust"
+      ]
+    },
+    {
+      "name": "TX_BUFFER",
+      "offset": 120,
+      "width": 32,
+      "access": "read-write",
+      "evidence": "inferred",
+      "description": "Aligned SRAM TX pointer; CH585 plain packet is contiguous header then payload, with tail cleared.",
+      "sources": [
+        "public-rust"
+      ]
+    },
+    {
+      "name": "RX_BUFFER",
+      "offset": 124,
+      "width": 32,
+      "access": "read-write",
+      "evidence": "inferred",
+      "description": "Aligned SRAM RX pointer; capture complete and CRC status must be established before consuming packet.",
+      "sources": [
+        "public-rust"
+      ]
+    }
+  ]
+}

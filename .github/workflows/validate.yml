@@ -24,3 +24,5 @@ jobs:
         run: python3 -m compileall -q tools
       - name: Validate register descriptions
         run: python3 tools/validate.py
+      - name: Test contract validation
+        run: python3 -m unittest discover -s tools -p 'test_*.py'

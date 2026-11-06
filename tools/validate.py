@@ -118,6 +118,8 @@ def main() -> int:
     for path in paths:
         validate(path)
     print(f"validated {len(paths)} register block(s)")
+    from validate_ble import main as validate_ble
+    validate_ble()
     return 0
 
 

@@ -1,0 +1,1764 @@
+{
+  "schema_version": "1.0",
+  "kind": "ble-vectors",
+  "name": "ble-v1",
+  "description": "Literal expected outputs independent of either implementation; profile-specific exclusions remain explicit.",
+  "cases": [
+    {
+      "id": "adv-default",
+      "operation": "advertising",
+      "input": {
+        "profile": "peripheral-checkpoint",
+        "bytes": [
+          32,
+          0,
+          64,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          7,
+          0
+        ]
+      },
+      "expected": [
+        1,
+        20000,
+        7
+      ]
+    },
+    {
+      "id": "adv-min-low",
+      "operation": "advertising",
+      "input": {
+        "profile": "peripheral-checkpoint",
+        "bytes": [
+          31,
+          0,
+          64,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          7,
+          0
+        ]
+      },
+      "expected": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "adv-max-less",
+      "operation": "advertising",
+      "input": {
+        "profile": "peripheral-checkpoint",
+        "bytes": [
+          32,
+          0,
+          31,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          7,
+          0
+        ]
+      },
+      "expected": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "adv-max-high",
+      "operation": "advertising",
+      "input": {
+        "profile": "peripheral-checkpoint",
+        "bytes": [
+          32,
+          0,
+          64,
+          65,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          7,
+          0
+        ]
+      },
+      "expected": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "adv-directed",
+      "operation": "advertising",
+      "input": {
+        "profile": "peripheral-checkpoint",
+        "bytes": [
+          32,
+          0,
+          64,
+          0,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          7,
+          0
+        ]
+      },
+      "expected": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "adv-privacy",
+      "operation": "advertising",
+      "input": {
+        "profile": "peripheral-checkpoint",
+        "bytes": [
+          32,
+          0,
+          64,
+          0,
+          0,
+          2,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          7,
+          0
+        ]
+      },
+      "expected": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "adv-peer-type",
+      "operation": "advertising",
+      "input": {
+        "profile": "peripheral-checkpoint",
+        "bytes": [
+          32,
+          0,
+          64,
+          0,
+          0,
+          1,
+          2,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          7,
+          0
+        ]
+      },
+      "expected": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "adv-channels-none",
+      "operation": "advertising",
+      "input": {
+        "profile": "peripheral-checkpoint",
+        "bytes": [
+          32,
+          0,
+          64,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "expected": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "adv-channels-rfu",
+      "operation": "advertising",
+      "input": {
+        "profile": "peripheral-checkpoint",
+        "bytes": [
+          32,
+          0,
+          64,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          8,
+          0
+        ]
+      },
+      "expected": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "adv-filter-list",
+      "operation": "advertising",
+      "input": {
+        "profile": "peripheral-checkpoint",
+        "bytes": [
+          32,
+          0,
+          64,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          7,
+          1
+        ]
+      },
+      "expected": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "adv-length-0",
+      "operation": "advertising",
+      "input": {
+        "profile": "peripheral-checkpoint",
+        "bytes": []
+      },
+      "expected": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "adv-length-1",
+      "operation": "advertising",
+      "input": {
+        "profile": "peripheral-checkpoint",
+        "bytes": [
+          32
+        ]
+      },
+      "expected": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "adv-length-14",
+      "operation": "advertising",
+      "input": {
+        "profile": "peripheral-checkpoint",
+        "bytes": [
+          32,
+          0,
+          64,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          7
+        ]
+      },
+      "expected": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "adv-length-16",
+      "operation": "advertising",
+      "input": {
+        "profile": "peripheral-checkpoint",
+        "bytes": [
+          32,
+          0,
+          64,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          7,
+          0,
+          0
+        ]
+      },
+      "expected": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "adv-peripheral-checkpoint-0",
+      "operation": "advertising",
+      "input": {
+        "profile": "peripheral-checkpoint",
+        "bytes": [
+          160,
+          0,
+          160,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          7,
+          0
+        ]
+      },
+      "expected": [
+        1,
+        100000,
+        7
+      ]
+    },
+    {
+      "id": "adv-peripheral-checkpoint-2",
+      "operation": "advertising",
+      "input": {
+        "profile": "peripheral-checkpoint",
+        "bytes": [
+          160,
+          0,
+          160,
+          0,
+          2,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          7,
+          0
+        ]
+      },
+      "expected": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "adv-peripheral-checkpoint-3",
+      "operation": "advertising",
+      "input": {
+        "profile": "peripheral-checkpoint",
+        "bytes": [
+          160,
+          0,
+          160,
+          0,
+          3,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          7,
+          0
+        ]
+      },
+      "expected": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "adv-max-peripheral-checkpoint",
+      "operation": "advertising",
+      "input": {
+        "profile": "peripheral-checkpoint",
+        "bytes": [
+          0,
+          64,
+          0,
+          64,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          7,
+          0
+        ]
+      },
+      "expected": [
+        1,
+        10240000,
+        7
+      ]
+    },
+    {
+      "id": "adv-ch585-primary-0",
+      "operation": "advertising",
+      "input": {
+        "profile": "ch585-primary",
+        "bytes": [
+          160,
+          0,
+          160,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          7,
+          0
+        ]
+      },
+      "expected": [
+        1,
+        100000,
+        7
+      ]
+    },
+    {
+      "id": "adv-ch585-primary-2",
+      "operation": "advertising",
+      "input": {
+        "profile": "ch585-primary",
+        "bytes": [
+          160,
+          0,
+          160,
+          0,
+          2,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          7,
+          0
+        ]
+      },
+      "expected": [
+        1,
+        100000,
+        7
+      ]
+    },
+    {
+      "id": "adv-ch585-primary-3",
+      "operation": "advertising",
+      "input": {
+        "profile": "ch585-primary",
+        "bytes": [
+          160,
+          0,
+          160,
+          0,
+          3,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          7,
+          0
+        ]
+      },
+      "expected": [
+        1,
+        100000,
+        7
+      ]
+    },
+    {
+      "id": "adv-max-ch585-primary",
+      "operation": "advertising",
+      "input": {
+        "profile": "ch585-primary",
+        "bytes": [
+          0,
+          64,
+          0,
+          64,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          7,
+          0
+        ]
+      },
+      "expected": [
+        1,
+        10240000,
+        7
+      ]
+    },
+    {
+      "id": "static-address-valid",
+      "operation": "static-address",
+      "input": {
+        "bytes": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          198
+        ]
+      },
+      "expected": [
+        1
+      ]
+    },
+    {
+      "id": "static-address-all-zero",
+      "operation": "static-address",
+      "input": {
+        "bytes": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          192
+        ]
+      },
+      "expected": [
+        0
+      ]
+    },
+    {
+      "id": "static-address-all-one",
+      "operation": "static-address",
+      "input": {
+        "bytes": [
+          255,
+          255,
+          255,
+          255,
+          255,
+          255
+        ]
+      },
+      "expected": [
+        0
+      ]
+    },
+    {
+      "id": "static-address-reserved-kind",
+      "operation": "static-address",
+      "input": {
+        "bytes": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          134
+        ]
+      },
+      "expected": [
+        0
+      ]
+    },
+    {
+      "id": "static-address-resolvable",
+      "operation": "static-address",
+      "input": {
+        "bytes": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          70
+        ]
+      },
+      "expected": [
+        0
+      ]
+    },
+    {
+      "id": "static-address-nonresolvable",
+      "operation": "static-address",
+      "input": {
+        "bytes": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ]
+      },
+      "expected": [
+        0
+      ]
+    },
+    {
+      "id": "data-empty",
+      "operation": "advertising-data",
+      "input": {
+        "bytes": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "expected": [
+        1
+      ]
+    },
+    {
+      "id": "data-all-zero-preserved",
+      "operation": "advertising-data",
+      "input": {
+        "bytes": [
+          31,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "expected": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "data-embedded-zero",
+      "operation": "advertising-data",
+      "input": {
+        "bytes": [
+          4,
+          0,
+          255,
+          4,
+          8,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "expected": [
+        1,
+        0,
+        255,
+        4,
+        8
+      ]
+    },
+    {
+      "id": "data-opaque-ff",
+      "operation": "advertising-data",
+      "input": {
+        "bytes": [
+          31,
+          255,
+          255,
+          255,
+          255,
+          255,
+          255,
+          255,
+          255,
+          255,
+          255,
+          255,
+          255,
+          255,
+          255,
+          255,
+          255,
+          255,
+          255,
+          255,
+          255,
+          255,
+          255,
+          255,
+          255,
+          255,
+          255,
+          255,
+          255,
+          255,
+          255,
+          255
+        ]
+      },
+      "expected": [
+        1,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255
+      ]
+    },
+    {
+      "id": "data-too-long",
+      "operation": "advertising-data",
+      "input": {
+        "bytes": [
+          32,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "expected": [
+        0
+      ]
+    },
+    {
+      "id": "data-size-0",
+      "operation": "advertising-data",
+      "input": {
+        "bytes": []
+      },
+      "expected": [
+        0
+      ]
+    },
+    {
+      "id": "data-size-1",
+      "operation": "advertising-data",
+      "input": {
+        "bytes": [
+          0
+        ]
+      },
+      "expected": [
+        0
+      ]
+    },
+    {
+      "id": "data-size-31",
+      "operation": "advertising-data",
+      "input": {
+        "bytes": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "expected": [
+        0
+      ]
+    },
+    {
+      "id": "data-size-33",
+      "operation": "advertising-data",
+      "input": {
+        "bytes": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "expected": [
+        0
+      ]
+    },
+    {
+      "id": "mask-unmaskable-14",
+      "operation": "event-mask",
+      "input": {
+        "mask": 0,
+        "le_mask": 0,
+        "code": 14,
+        "params": []
+      },
+      "expected": [
+        1
+      ]
+    },
+    {
+      "id": "mask-unmaskable-15",
+      "operation": "event-mask",
+      "input": {
+        "mask": 0,
+        "le_mask": 0,
+        "code": 15,
+        "params": []
+      },
+      "expected": [
+        1
+      ]
+    },
+    {
+      "id": "mask-unmaskable-19",
+      "operation": "event-mask",
+      "input": {
+        "mask": 0,
+        "le_mask": 0,
+        "code": 19,
+        "params": []
+      },
+      "expected": [
+        1
+      ]
+    },
+    {
+      "id": "mask-general-disabled",
+      "operation": "event-mask",
+      "input": {
+        "mask": 0,
+        "le_mask": 1,
+        "code": 62,
+        "params": [
+          1
+        ]
+      },
+      "expected": [
+        0
+      ]
+    },
+    {
+      "id": "mask-le-disabled",
+      "operation": "event-mask",
+      "input": {
+        "mask": 2305843009213693952,
+        "le_mask": 0,
+        "code": 62,
+        "params": [
+          1
+        ]
+      },
+      "expected": [
+        0
+      ]
+    },
+    {
+      "id": "mask-connection",
+      "operation": "event-mask",
+      "input": {
+        "mask": 2305843009213693952,
+        "le_mask": 1,
+        "code": 62,
+        "params": [
+          1
+        ]
+      },
+      "expected": [
+        1
+      ]
+    },
+    {
+      "id": "mask-wrong-subevent",
+      "operation": "event-mask",
+      "input": {
+        "mask": 2305843009213693952,
+        "le_mask": 1,
+        "code": 62,
+        "params": [
+          3
+        ]
+      },
+      "expected": [
+        0
+      ]
+    },
+    {
+      "id": "mask-zero-event",
+      "operation": "event-mask",
+      "input": {
+        "mask": 18446744073709551615,
+        "le_mask": 18446744073709551615,
+        "code": 0,
+        "params": []
+      },
+      "expected": [
+        0
+      ]
+    },
+    {
+      "id": "mask-bad-event",
+      "operation": "event-mask",
+      "input": {
+        "mask": 18446744073709551615,
+        "le_mask": 18446744073709551615,
+        "code": 65,
+        "params": []
+      },
+      "expected": [
+        0
+      ]
+    },
+    {
+      "id": "mask-bad-subevent",
+      "operation": "event-mask",
+      "input": {
+        "mask": 18446744073709551615,
+        "le_mask": 18446744073709551615,
+        "code": 62,
+        "params": [
+          65
+        ]
+      },
+      "expected": [
+        0
+      ]
+    },
+    {
+      "id": "mask-disconnect",
+      "operation": "event-mask",
+      "input": {
+        "mask": 16,
+        "le_mask": 0,
+        "code": 5,
+        "params": []
+      },
+      "expected": [
+        1
+      ]
+    },
+    {
+      "id": "connection-default",
+      "operation": "connection-parameters",
+      "input": {
+        "values": [
+          24,
+          24,
+          0,
+          200
+        ]
+      },
+      "expected": [
+        1
+      ]
+    },
+    {
+      "id": "connection-min",
+      "operation": "connection-parameters",
+      "input": {
+        "values": [
+          6,
+          6,
+          0,
+          10
+        ]
+      },
+      "expected": [
+        1
+      ]
+    },
+    {
+      "id": "connection-interval-low",
+      "operation": "connection-parameters",
+      "input": {
+        "values": [
+          5,
+          6,
+          0,
+          10
+        ]
+      },
+      "expected": [
+        0
+      ]
+    },
+    {
+      "id": "connection-reversed",
+      "operation": "connection-parameters",
+      "input": {
+        "values": [
+          7,
+          6,
+          0,
+          10
+        ]
+      },
+      "expected": [
+        0
+      ]
+    },
+    {
+      "id": "connection-max",
+      "operation": "connection-parameters",
+      "input": {
+        "values": [
+          3200,
+          3200,
+          0,
+          3200
+        ]
+      },
+      "expected": [
+        1
+      ]
+    },
+    {
+      "id": "connection-interval-high",
+      "operation": "connection-parameters",
+      "input": {
+        "values": [
+          3200,
+          3201,
+          0,
+          3200
+        ]
+      },
+      "expected": [
+        0
+      ]
+    },
+    {
+      "id": "connection-latency-max",
+      "operation": "connection-parameters",
+      "input": {
+        "values": [
+          24,
+          24,
+          499,
+          3200
+        ]
+      },
+      "expected": [
+        1
+      ]
+    },
+    {
+      "id": "connection-latency-high",
+      "operation": "connection-parameters",
+      "input": {
+        "values": [
+          24,
+          24,
+          500,
+          3200
+        ]
+      },
+      "expected": [
+        0
+      ]
+    },
+    {
+      "id": "connection-strict-equality",
+      "operation": "connection-parameters",
+      "input": {
+        "values": [
+          40,
+          40,
+          0,
+          10
+        ]
+      },
+      "expected": [
+        0
+      ]
+    },
+    {
+      "id": "connection-below-bound",
+      "operation": "connection-parameters",
+      "input": {
+        "values": [
+          39,
+          39,
+          0,
+          10
+        ]
+      },
+      "expected": [
+        1
+      ]
+    },
+    {
+      "id": "connection-timeout-low",
+      "operation": "connection-parameters",
+      "input": {
+        "values": [
+          24,
+          24,
+          0,
+          9
+        ]
+      },
+      "expected": [
+        0
+      ]
+    },
+    {
+      "id": "connection-timeout-high",
+      "operation": "connection-parameters",
+      "input": {
+        "values": [
+          24,
+          24,
+          0,
+          3201
+        ]
+      },
+      "expected": [
+        0
+      ]
+    },
+    {
+      "id": "disconnect-00",
+      "operation": "disconnect-reason",
+      "input": {
+        "reason": 0
+      },
+      "expected": [
+        0
+      ]
+    },
+    {
+      "id": "disconnect-05",
+      "operation": "disconnect-reason",
+      "input": {
+        "reason": 5
+      },
+      "expected": [
+        1
+      ]
+    },
+    {
+      "id": "disconnect-13",
+      "operation": "disconnect-reason",
+      "input": {
+        "reason": 19
+      },
+      "expected": [
+        1
+      ]
+    },
+    {
+      "id": "disconnect-14",
+      "operation": "disconnect-reason",
+      "input": {
+        "reason": 20
+      },
+      "expected": [
+        1
+      ]
+    },
+    {
+      "id": "disconnect-15",
+      "operation": "disconnect-reason",
+      "input": {
+        "reason": 21
+      },
+      "expected": [
+        1
+      ]
+    },
+    {
+      "id": "disconnect-16",
+      "operation": "disconnect-reason",
+      "input": {
+        "reason": 22
+      },
+      "expected": [
+        0
+      ]
+    },
+    {
+      "id": "disconnect-1a",
+      "operation": "disconnect-reason",
+      "input": {
+        "reason": 26
+      },
+      "expected": [
+        1
+      ]
+    },
+    {
+      "id": "disconnect-29",
+      "operation": "disconnect-reason",
+      "input": {
+        "reason": 41
+      },
+      "expected": [
+        1
+      ]
+    },
+    {
+      "id": "disconnect-3b",
+      "operation": "disconnect-reason",
+      "input": {
+        "reason": 59
+      },
+      "expected": [
+        1
+      ]
+    },
+    {
+      "id": "disconnect-ff",
+      "operation": "disconnect-reason",
+      "input": {
+        "reason": 255
+      },
+      "expected": [
+        0
+      ]
+    },
+    {
+      "id": "capture-0",
+      "operation": "capture-ack",
+      "input": {
+        "status": 0
+      },
+      "expected": [
+        0
+      ]
+    },
+    {
+      "id": "capture-32",
+      "operation": "capture-ack",
+      "input": {
+        "status": 32
+      },
+      "expected": [
+        0
+      ]
+    },
+    {
+      "id": "capture-64",
+      "operation": "capture-ack",
+      "input": {
+        "status": 64
+      },
+      "expected": [
+        64
+      ]
+    },
+    {
+      "id": "capture-96",
+      "operation": "capture-ack",
+      "input": {
+        "status": 96
+      },
+      "expected": [
+        64
+      ]
+    },
+    {
+      "id": "capture-496",
+      "operation": "capture-ack",
+      "input": {
+        "status": 496
+      },
+      "expected": [
+        64
+      ]
+    },
+    {
+      "id": "capture-4294967295",
+      "operation": "capture-ack",
+      "input": {
+        "status": 4294967295
+      },
+      "expected": [
+        64
+      ]
+    },
+    {
+      "id": "tx-countdown-2",
+      "operation": "tx-countdown",
+      "input": {
+        "packet_bytes": 2
+      },
+      "expected": [
+        540
+      ]
+    },
+    {
+      "id": "tx-countdown-31",
+      "operation": "tx-countdown",
+      "input": {
+        "packet_bytes": 31
+      },
+      "expected": [
+        1004
+      ]
+    },
+    {
+      "id": "tx-countdown-39",
+      "operation": "tx-countdown",
+      "input": {
+        "packet_bytes": 39
+      },
+      "expected": [
+        1132
+      ]
+    },
+    {
+      "id": "rx-countdown-0",
+      "operation": "rx-countdown",
+      "input": {
+        "payload_bytes": 0
+      },
+      "expected": [
+        140
+      ]
+    },
+    {
+      "id": "rx-countdown-27",
+      "operation": "rx-countdown",
+      "input": {
+        "payload_bytes": 27
+      },
+      "expected": [
+        572
+      ]
+    },
+    {
+      "id": "rx-countdown-37",
+      "operation": "rx-countdown",
+      "input": {
+        "payload_bytes": 37
+      },
+      "expected": [
+        732
+      ]
+    },
+    {
+      "id": "rx-length-0-27",
+      "operation": "receive-length",
+      "input": {
+        "advertising": false,
+        "payload_bytes": 27,
+        "dma_bytes": 64
+      },
+      "expected": [
+        0,
+        29
+      ]
+    },
+    {
+      "id": "rx-length-0-28",
+      "operation": "receive-length",
+      "input": {
+        "advertising": false,
+        "payload_bytes": 28,
+        "dma_bytes": 64
+      },
+      "expected": [
+        1,
+        0
+      ]
+    },
+    {
+      "id": "rx-length-1-37",
+      "operation": "receive-length",
+      "input": {
+        "advertising": true,
+        "payload_bytes": 37,
+        "dma_bytes": 64
+      },
+      "expected": [
+        0,
+        39
+      ]
+    },
+    {
+      "id": "rx-length-1-38",
+      "operation": "receive-length",
+      "input": {
+        "advertising": true,
+        "payload_bytes": 38,
+        "dma_bytes": 64
+      },
+      "expected": [
+        1,
+        0
+      ]
+    },
+    {
+      "id": "rx-length-1-62",
+      "operation": "receive-length",
+      "input": {
+        "advertising": true,
+        "payload_bytes": 62,
+        "dma_bytes": 64
+      },
+      "expected": [
+        1,
+        0
+      ]
+    },
+    {
+      "id": "rx-length-1-63",
+      "operation": "receive-length",
+      "input": {
+        "advertising": true,
+        "payload_bytes": 63,
+        "dma_bytes": 64
+      },
+      "expected": [
+        2,
+        0
+      ]
+    },
+    {
+      "id": "rx-length-0-255",
+      "operation": "receive-length",
+      "input": {
+        "advertising": false,
+        "payload_bytes": 255,
+        "dma_bytes": 64
+      },
+      "expected": [
+        2,
+        0
+      ]
+    },
+    {
+      "id": "rx-length-0-0",
+      "operation": "receive-length",
+      "input": {
+        "advertising": false,
+        "payload_bytes": 0,
+        "dma_bytes": 64
+      },
+      "expected": [
+        0,
+        2
+      ]
+    }
+  ]
+}

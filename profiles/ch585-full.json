@@ -1,0 +1,75 @@
+{
+  "schema_version": "1.0",
+  "kind": "ble-profile",
+  "name": "ch585-full",
+  "chip": "CH585",
+  "experimental": false,
+  "role": "primary-specification-target",
+  "sram_bytes": 131072,
+  "source": "https://wch-ic.com/products/CH585.html",
+  "status": "not-yet-conformant",
+  "features": [
+    {
+      "id": "legacy-advertising",
+      "requirement": "required"
+    },
+    {
+      "id": "scanning",
+      "requirement": "required"
+    },
+    {
+      "id": "central-initiation",
+      "requirement": "required"
+    },
+    {
+      "id": "peripheral",
+      "requirement": "required"
+    },
+    {
+      "id": "dual-role-scheduling",
+      "requirement": "required"
+    },
+    {
+      "id": "multi-pdu-ordinary-host",
+      "requirement": "required"
+    },
+    {
+      "id": "encryption-mic-rejection",
+      "requirement": "required"
+    },
+    {
+      "id": "connection-control",
+      "requirement": "required"
+    },
+    {
+      "id": "complete-hci-reporting",
+      "requirement": "required"
+    },
+    {
+      "id": "usb-ble-coexistence",
+      "requirement": "required"
+    },
+    {
+      "id": "le-2m",
+      "requirement": "target"
+    },
+    {
+      "id": "data-length-extension",
+      "requirement": "target"
+    },
+    {
+      "id": "extended-periodic-advertising",
+      "requirement": "investigate"
+    },
+    {
+      "id": "coded-phy-iso",
+      "requirement": "investigate"
+    }
+  ],
+  "rules": [
+    "A required feature must pass acceptance before the full profile is declared conformant.",
+    "Do not set HCI feature/command/state bits until implementation and matching tests exist.",
+    "Do not inherit CH582 queue sizes, connection count or USB exclusions.",
+    "Record measured resource budgets per implementation and build."
+  ]
+}

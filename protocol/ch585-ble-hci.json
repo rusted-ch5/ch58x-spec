@@ -1,0 +1,685 @@
+{
+  "schema_version": "1.0",
+  "kind": "ble-hci-contract",
+  "name": "ch585_ble_hci",
+  "status": "work-in-progress",
+  "primary_chip": "CH585",
+  "adaptations": [
+    "../profiles/experimental/ch582-peripheral.json"
+  ],
+  "byte_order": "little-endian",
+  "sources": [
+    {
+      "id": "core-6.0-hci",
+      "kind": "public-document",
+      "reference": "https://www.bluetooth.com/wp-content/uploads/Files/Specification/HTML/Core-60/out/en/host-controller-interface/host-controller-interface-functional-specification.html"
+    }
+  ],
+  "transport": {
+    "byte_order": "little-endian",
+    "command_header_bytes": 3,
+    "acl_header_bytes": 4,
+    "h4_type_bytes": 1,
+    "rule": "An H4 transport includes its packet-type octet; an in-process transport may carry the type separately. Validate the complete declared length before dispatch. Report actual enabled ACL payload capacity and owner credits through HCI. Queue sizes are build resource choices, not chip limits."
+  },
+  "commands": [
+    {
+      "opcode": "0x0406",
+      "name": "Disconnect",
+      "parameter_length": 3,
+      "response": "command-status",
+      "fields": [
+        {
+          "name": "handle",
+          "offset": 0,
+          "width": 2,
+          "encoding": "u16le",
+          "constraint": "active handle"
+        },
+        {
+          "name": "reason",
+          "offset": 2,
+          "width": 1,
+          "encoding": "u8",
+          "constraint": "05,13,14,15,1a,29,3b"
+        }
+      ],
+      "rule": "Unknown handle: 02; invalid reason: 12; success queues termination, not immediate owner release.",
+      "core_section": "7.1.6"
+    },
+    {
+      "opcode": "0x041d",
+      "name": "Read Remote Version Information",
+      "parameter_length": 2,
+      "response": "command-status",
+      "fields": [
+        {
+          "name": "handle",
+          "offset": 0,
+          "width": 2,
+          "encoding": "u16le",
+          "constraint": ""
+        }
+      ],
+      "rule": "Complete via Remote Version Information event, not Command Complete.",
+      "core_section": "7.1.23"
+    },
+    {
+      "opcode": "0x0c01",
+      "name": "Set Event Mask",
+      "parameter_length": 8,
+      "response": "command-complete",
+      "fields": [
+        {
+          "name": "mask",
+          "offset": 0,
+          "width": 8,
+          "encoding": "u64le",
+          "constraint": ""
+        }
+      ],
+      "rule": "Code e uses bit e-1; command/credit events bypass masks.",
+      "core_section": "7.3.1"
+    },
+    {
+      "opcode": "0x0c03",
+      "name": "Reset",
+      "parameter_length": 0,
+      "response": "command-complete",
+      "fields": [],
+      "rule": "Quiesce radio and reset protocol state, masks and credits. Do not carry stale pending owners into the new session.",
+      "core_section": "7.3.2"
+    },
+    {
+      "opcode": "0x0c31",
+      "name": "Set Controller To Host Flow Control",
+      "parameter_length": 1,
+      "response": "command-complete",
+      "fields": [
+        {
+          "name": "enable",
+          "offset": 0,
+          "width": 1,
+          "encoding": "u8",
+          "constraint": "0 only in current in-process transport"
+        }
+      ],
+      "rule": "Only disable is accepted; enabling unsupported flow control must fail.",
+      "core_section": "7.3.38"
+    },
+    {
+      "opcode": "0x1001",
+      "name": "Read Local Version Information",
+      "parameter_length": 0,
+      "response": "command-complete",
+      "fields": [],
+      "rule": "Return status then 8 bytes. Report only implemented capabilities; zero BD_ADDR is not a usable identity.",
+      "core_section": "7.4.1"
+    },
+    {
+      "opcode": "0x1002",
+      "name": "Read Local Supported Commands",
+      "parameter_length": 0,
+      "response": "command-complete",
+      "fields": [],
+      "rule": "Return status then 64 bytes. Report only implemented capabilities; zero BD_ADDR is not a usable identity.",
+      "core_section": "7.4.2"
+    },
+    {
+      "opcode": "0x1003",
+      "name": "Read Local Supported Features",
+      "parameter_length": 0,
+      "response": "command-complete",
+      "fields": [],
+      "rule": "Return status then 8 bytes. Report only implemented capabilities; zero BD_ADDR is not a usable identity.",
+      "core_section": "7.4.3"
+    },
+    {
+      "opcode": "0x1009",
+      "name": "Read BD_ADDR",
+      "parameter_length": 0,
+      "response": "command-complete",
+      "fields": [],
+      "rule": "Return status then 6 bytes. Report only implemented capabilities; zero BD_ADDR is not a usable identity.",
+      "core_section": "7.4.6"
+    },
+    {
+      "opcode": "0x1405",
+      "name": "Read RSSI",
+      "parameter_length": 2,
+      "response": "command-complete",
+      "fields": [
+        {
+          "name": "handle",
+          "offset": 0,
+          "width": 2,
+          "encoding": "u16le",
+          "constraint": ""
+        }
+      ],
+      "rule": "Return status, echoed handle, signed i8 RSSI; unknown handle status 02.",
+      "core_section": "7.5.4"
+    },
+    {
+      "opcode": "0x2001",
+      "name": "LE Set Event Mask",
+      "parameter_length": 8,
+      "response": "command-complete",
+      "fields": [
+        {
+          "name": "mask",
+          "offset": 0,
+          "width": 8,
+          "encoding": "u64le",
+          "constraint": ""
+        }
+      ],
+      "rule": "LE subevent s uses bit s-1 and also requires general LE Meta event enable.",
+      "core_section": "7.8.1"
+    },
+    {
+      "opcode": "0x2002",
+      "name": "LE Read Buffer Size",
+      "parameter_length": 0,
+      "response": "command-complete",
+      "fields": [],
+      "rule": "Return status, u16le ACL payload capacity, u8 packet credits; report actual build allocation.",
+      "core_section": "7.8.2"
+    },
+    {
+      "opcode": "0x2003",
+      "name": "LE Read Local Supported Features",
+      "parameter_length": 0,
+      "response": "command-complete",
+      "fields": [],
+      "rule": "Return status and eight feature octets. Advertise only features implemented and accepted for the selected profile.",
+      "core_section": "7.8.3"
+    },
+    {
+      "opcode": "0x2005",
+      "name": "LE Set Random Address",
+      "parameter_length": 6,
+      "response": "command-complete",
+      "fields": [
+        {
+          "name": "address",
+          "offset": 0,
+          "width": 6,
+          "encoding": "bytes-le",
+          "constraint": "static random for shared conformance profile; bits 47:46=11, lower 46 neither all zero nor all one"
+        }
+      ],
+      "rule": "Reject mutation while advertising/scanning/connected; unsupported address kinds are profile-specific.",
+      "core_section": "7.8.4"
+    },
+    {
+      "opcode": "0x2006",
+      "name": "LE Set Advertising Parameters",
+      "parameter_length": 15,
+      "response": "command-complete",
+      "fields": [
+        {
+          "name": "interval_min",
+          "offset": 0,
+          "width": 2,
+          "encoding": "u16le",
+          "constraint": "0x0020..0x4000; unit 625 us"
+        },
+        {
+          "name": "interval_max",
+          "offset": 2,
+          "width": 2,
+          "encoding": "u16le",
+          "constraint": "min..0x4000"
+        },
+        {
+          "name": "advertising_type",
+          "offset": 4,
+          "width": 1,
+          "encoding": "u8",
+          "constraint": "Primary legacy subset: 0, 2, 3; Peripheral checkpoint: 0."
+        },
+        {
+          "name": "own_address_type",
+          "offset": 5,
+          "width": 1,
+          "encoding": "u8",
+          "constraint": "Primary legacy subset: 0 or 1; Peripheral checkpoint: 1. Public addressing requires a usable public identity before enable."
+        },
+        {
+          "name": "peer_address_type",
+          "offset": 6,
+          "width": 1,
+          "encoding": "u8",
+          "constraint": "0 or 1"
+        },
+        {
+          "name": "peer_address",
+          "offset": 7,
+          "width": 6,
+          "encoding": "bytes-le",
+          "constraint": "ignored for undirected types"
+        },
+        {
+          "name": "channel_map",
+          "offset": 13,
+          "width": 1,
+          "encoding": "u8",
+          "constraint": "nonzero subset of 0x07"
+        },
+        {
+          "name": "filter_policy",
+          "offset": 14,
+          "width": 1,
+          "encoding": "u8",
+          "constraint": "0 in checkpoints"
+        }
+      ],
+      "rule": "Validate before mutating live state. Choose an interval within the requested range. The legacy subset requires a minimum 0x00a0 for nonconnectable/scannable advertising.",
+      "core_section": "7.8.5"
+    },
+    {
+      "opcode": "0x2007",
+      "name": "LE Read Advertising Physical Channel Tx Power",
+      "parameter_length": 0,
+      "response": "command-complete",
+      "fields": [],
+      "rule": "Signed dBm requires calibration evidence; a register preset is not calibrated dBm.",
+      "core_section": "7.8.6"
+    },
+    {
+      "opcode": "0x2008",
+      "name": "LE Set Advertising Data",
+      "parameter_length": 32,
+      "response": "command-complete",
+      "fields": [
+        {
+          "name": "length",
+          "offset": 0,
+          "width": 1,
+          "encoding": "u8",
+          "constraint": "0..31"
+        },
+        {
+          "name": "data",
+          "offset": 1,
+          "width": 31,
+          "encoding": "bytes",
+          "constraint": "only first length octets used"
+        }
+      ],
+      "rule": "HCI payload is opaque octets; preserve zeros and padding inside the declared length. Do not reinterpret/truncate AD structures. Trailing bytes outside length are ignored.",
+      "core_section": "7.8.7"
+    },
+    {
+      "opcode": "0x2009",
+      "name": "LE Set Scan Response Data",
+      "parameter_length": 32,
+      "response": "command-complete",
+      "fields": [
+        {
+          "name": "length",
+          "offset": 0,
+          "width": 1,
+          "encoding": "u8",
+          "constraint": "0..31"
+        },
+        {
+          "name": "data",
+          "offset": 1,
+          "width": 31,
+          "encoding": "bytes",
+          "constraint": "only first length octets used"
+        }
+      ],
+      "rule": "HCI payload is opaque octets; preserve zeros and padding inside the declared length. Do not reinterpret/truncate AD structures. Trailing bytes outside length are ignored.",
+      "core_section": "7.8.8"
+    },
+    {
+      "opcode": "0x200a",
+      "name": "LE Set Advertising Enable",
+      "parameter_length": 1,
+      "response": "command-complete",
+      "fields": [
+        {
+          "name": "enable",
+          "offset": 0,
+          "width": 1,
+          "encoding": "u8",
+          "constraint": "0 or 1"
+        }
+      ],
+      "rule": "Enable requires usable own identity and compatible role state. Invalid values: 12; conflicting state: 0c.",
+      "core_section": "7.8.9"
+    },
+    {
+      "opcode": "0x200b",
+      "name": "LE Set Scan Parameters",
+      "parameter_length": 7,
+      "response": "command-complete",
+      "fields": [
+        {
+          "name": "scan_type",
+          "offset": 0,
+          "width": 1,
+          "encoding": "u8",
+          "constraint": "0 passive,1 active"
+        },
+        {
+          "name": "interval",
+          "offset": 1,
+          "width": 2,
+          "encoding": "u16le",
+          "constraint": "4..0x4000, unit 625 us"
+        },
+        {
+          "name": "window",
+          "offset": 3,
+          "width": 2,
+          "encoding": "u16le",
+          "constraint": "4..interval"
+        },
+        {
+          "name": "own_address_type",
+          "offset": 5,
+          "width": 1,
+          "encoding": "u8",
+          "constraint": "Primary legacy subset: 0 or 1; Peripheral checkpoint: 1. Public addressing requires a usable public identity before enable."
+        },
+        {
+          "name": "filter_policy",
+          "offset": 6,
+          "width": 1,
+          "encoding": "u8",
+          "constraint": "0"
+        }
+      ],
+      "rule": "Reject parameter changes while scanning. Concurrent scanning and connections require an accepted scheduling profile.",
+      "core_section": "7.8.10"
+    },
+    {
+      "opcode": "0x200c",
+      "name": "LE Set Scan Enable",
+      "parameter_length": 2,
+      "response": "command-complete",
+      "fields": [
+        {
+          "name": "enable",
+          "offset": 0,
+          "width": 1,
+          "encoding": "u8",
+          "constraint": "0 or 1"
+        },
+        {
+          "name": "filter_duplicates",
+          "offset": 1,
+          "width": 1,
+          "encoding": "u8",
+          "constraint": "0 or 1"
+        }
+      ],
+      "rule": "Enable clears duplicate history and starts at advertising channel 37.",
+      "core_section": "7.8.11"
+    },
+    {
+      "opcode": "0x200f",
+      "name": "LE Read Filter Accept List Size",
+      "parameter_length": 0,
+      "response": "command-complete",
+      "fields": [],
+      "rule": "Return the configured filter accept list capacity. Zero capacity must not imply usable list entries.",
+      "core_section": "7.8.14"
+    },
+    {
+      "opcode": "0x2010",
+      "name": "LE Clear Filter Accept List",
+      "parameter_length": 0,
+      "response": "command-complete",
+      "fields": [],
+      "rule": "Clear configured entries only when no active procedure owns the list; reject prohibited live mutation.",
+      "core_section": "7.8.15"
+    },
+    {
+      "opcode": "0x2013",
+      "name": "LE Connection Update",
+      "parameter_length": 14,
+      "response": "command-status",
+      "fields": [
+        {
+          "name": "handle",
+          "offset": 0,
+          "width": 2,
+          "encoding": "u16le",
+          "constraint": ""
+        },
+        {
+          "name": "interval_min",
+          "offset": 2,
+          "width": 2,
+          "encoding": "u16le",
+          "constraint": "6..3200, unit 1250 us"
+        },
+        {
+          "name": "interval_max",
+          "offset": 4,
+          "width": 2,
+          "encoding": "u16le",
+          "constraint": "min..3200"
+        },
+        {
+          "name": "latency",
+          "offset": 6,
+          "width": 2,
+          "encoding": "u16le",
+          "constraint": "0..499"
+        },
+        {
+          "name": "timeout",
+          "offset": 8,
+          "width": 2,
+          "encoding": "u16le",
+          "constraint": "10..3200, unit 10 ms"
+        },
+        {
+          "name": "min_ce_length",
+          "offset": 10,
+          "width": 2,
+          "encoding": "u16le",
+          "constraint": "unit 625 us, scheduling hint"
+        },
+        {
+          "name": "max_ce_length",
+          "offset": 12,
+          "width": 2,
+          "encoding": "u16le",
+          "constraint": ">= min_ce_length"
+        }
+      ],
+      "rule": "timeout*8 > 2*(latency+1)*interval_max, computed widened. Validate CE length bounds before starting a procedure. Successful Command Status is not proof the update applied; report the asynchronous completion separately.",
+      "core_section": "7.8.18"
+    },
+    {
+      "opcode": "0x2015",
+      "name": "LE Read Channel Map",
+      "parameter_length": 2,
+      "response": "command-complete",
+      "fields": [
+        {
+          "name": "handle",
+          "offset": 0,
+          "width": 2,
+          "encoding": "u16le",
+          "constraint": ""
+        }
+      ],
+      "rule": "Return status, handle and five-byte active map; pending map is not active.",
+      "core_section": "7.8.20"
+    },
+    {
+      "opcode": "0x2016",
+      "name": "LE Read Remote Features",
+      "parameter_length": 2,
+      "response": "command-status",
+      "fields": [
+        {
+          "name": "handle",
+          "offset": 0,
+          "width": 2,
+          "encoding": "u16le",
+          "constraint": ""
+        }
+      ],
+      "rule": "Completion is LE Read Remote Features Complete; verify matching handle.",
+      "core_section": "7.8.21"
+    },
+    {
+      "opcode": "0x2018",
+      "name": "LE Rand",
+      "parameter_length": 0,
+      "response": "command-complete",
+      "fields": [],
+      "rule": "Return eight random octets from the configured source. A caller-seeded PRNG alone does not establish entropy or security readiness.",
+      "core_section": "7.8.23"
+    },
+    {
+      "opcode": "0x201c",
+      "name": "LE Read Supported States",
+      "parameter_length": 0,
+      "response": "command-complete",
+      "fields": [],
+      "rule": "Return eight-byte state combinations; absence of concurrent roles must be represented.",
+      "core_section": "7.8.27"
+    }
+  ],
+  "events": [
+    {
+      "code": "0x0e",
+      "name": "Command Complete",
+      "layout": "num_commands:u8, opcode:u16le, status:u8, return_parameters",
+      "maskable": false
+    },
+    {
+      "code": "0x0f",
+      "name": "Command Status",
+      "layout": "status:u8, num_commands:u8, opcode:u16le",
+      "maskable": false
+    },
+    {
+      "code": "0x13",
+      "name": "Number Of Completed Packets",
+      "layout": "num_handles:u8, repeated(handle:u16le, completed:u16le)",
+      "maskable": false
+    },
+    {
+      "code": "0x05",
+      "name": "Disconnection Complete",
+      "layout": "status:u8, handle:u16le, reason:u8",
+      "maskable": true
+    },
+    {
+      "code": "0x3e",
+      "name": "LE Meta",
+      "layout": "subevent:u8, subevent_parameters; connection=01, advertising report=02, update=03, remote features=04, LTK request=05",
+      "maskable": true
+    }
+  ],
+  "status_codes": {
+    "00": "Success",
+    "01": "Unknown HCI Command",
+    "02": "Unknown Connection Identifier",
+    "03": "Hardware Failure",
+    "07": "Memory Capacity Exceeded",
+    "0c": "Command Disallowed",
+    "11": "Unsupported Feature or Parameter Value",
+    "12": "Invalid HCI Command Parameters",
+    "1a": "Unsupported Remote Feature",
+    "3a": "Controller Busy"
+  },
+  "requirements": [
+    {
+      "id": "ARCH-585",
+      "text": "CH585 is primary; CH582 reductions stay in separate explicit experimental modules.",
+      "gate": "source-audit"
+    },
+    {
+      "id": "HCI-FRAME",
+      "text": "Little-endian command opcode and lengths; exact packet framing; no out-of-bounds or partial state mutation.",
+      "gate": "host-vectors"
+    },
+    {
+      "id": "HCI-LENGTH",
+      "text": "Known command wrong parameter length reports Invalid HCI Command Parameters (12) using its command-complete/status response kind.",
+      "gate": "host-vectors"
+    },
+    {
+      "id": "HCI-ADV",
+      "text": "Validate advertising fields and state before replacing advertiser settings.",
+      "gate": "host-vectors"
+    },
+    {
+      "id": "HCI-DATA",
+      "text": "Preserve all declared advertising/scan-response bytes, including zero and malformed AD content.",
+      "gate": "host-vectors"
+    },
+    {
+      "id": "HCI-ADDRESS",
+      "text": "Validate static random address and reject changes during incompatible active state.",
+      "gate": "host-vectors"
+    },
+    {
+      "id": "HCI-MASK",
+      "text": "Separate general and LE masks; Command Complete/Status and completed-packet credits cannot be masked.",
+      "gate": "host-vectors"
+    },
+    {
+      "id": "HCI-CONN",
+      "text": "Validate units, inclusive bounds and strict supervision inequality using widened arithmetic.",
+      "gate": "host-vectors"
+    },
+    {
+      "id": "HCI-OWNER",
+      "text": "Return each accepted ACL credit once, after ACK or explicit cancellation; retries do not create fresh owners.",
+      "gate": "scripted-controller"
+    },
+    {
+      "id": "HCI-RESET",
+      "text": "Cancel old work and restore state/credits without stale packets, queue deadlock or leaked callbacks.",
+      "gate": "scripted-controller"
+    },
+    {
+      "id": "RF-CAPTURE",
+      "text": "CH585 capture IRQ acknowledges BB bit 6 only before CRC classification; preserve bit 5.",
+      "gate": "host-vectors"
+    },
+    {
+      "id": "RF-DMA",
+      "text": "Validate protocol length separately from physical DMA capacity; DMA pointer and mode are chip-specific.",
+      "gate": "host-vectors"
+    },
+    {
+      "id": "RF-TIMING",
+      "text": "Use CH585 LE1M arithmetic and bounded polls; no transfer of CH582 timing/mode constants.",
+      "gate": "host-vectors"
+    },
+    {
+      "id": "RF-PEER",
+      "text": "Independent peer validates discovered identity, read/write/readback, exact notifications and reconnect.",
+      "gate": "hardware"
+    },
+    {
+      "id": "RF-SOAK",
+      "text": "Active traffic spans timer rollover; no probe access, unplanned disconnect, malformed or missing application data.",
+      "gate": "hardware"
+    },
+    {
+      "id": "SECURITY",
+      "text": "AES/CCM vectors, packet-counter/nonce retry ownership, MIC rejection and encrypted peer continuity all pass before advertising encryption.",
+      "gate": "hardware"
+    },
+    {
+      "id": "COEX",
+      "text": "Full CH585 BLE+USB profile has separate SRAM/stack, USB traffic and peer continuity acceptance.",
+      "gate": "hardware"
+    }
+  ]
+}
